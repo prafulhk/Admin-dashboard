@@ -1,0 +1,24 @@
+<div class="bg-gray-900 text-white fixed top-0 left-0 h-screen z-40
+         w-64 transform transition-transform duration-300
+         md:translate-x-0" [class.translate-x-0]="isMobileOpen" [class.-translate-x-full]="!isMobileOpen">
+
+  <ul class="mt-6 space-y-4">
+
+    <li routerLink="/dashboard" class="flex items-center px-4 py-2 cursor-pointer">
+      📊
+      <span *ngIf="isOpen">Dashboard</span>
+    </li>
+
+    <li routerLink="/users" class="flex items-center px-4 py-2 cursor-pointer">
+      👥
+      <span *ngIf="isOpen">Users</span>
+    </li>
+
+    <li routerLink="/settings" class="flex items-center px-4 py-2 cursor-pointer">
+      ⚙
+      <span *ngIf="isOpen">Settings</span>
+    </li>
+
+  </ul>
+
+</div>
