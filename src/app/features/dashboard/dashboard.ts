@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { Card } from '../../shared/components/card/card';
 import { Table } from '../../shared/components/table/table';
 import { Modal } from '../../shared/components/modal/modal';
@@ -40,6 +40,7 @@ export class Dashboard {
   constructor(
     private toast: ToastService,
     private userService: UserService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
@@ -52,6 +53,7 @@ export class Dashboard {
       this.users = data;
       this.filteredUsers = [...data];
       this.isLoading = false;
+      this.cdr.detectChanges();
     });
   }
 
@@ -111,6 +113,7 @@ export class Dashboard {
     this.userService.getUsers().subscribe((data) => {
       this.users = data;
       this.filteredUsers = [...data];
+      this.cdr.detectChanges();
     });
   }
 

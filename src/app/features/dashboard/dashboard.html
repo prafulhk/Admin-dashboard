@@ -81,8 +81,8 @@
 
         </div>
         <app-card>
-            <app-table *ngIf="filteredUsers.length" [columns]="columns" [data]="filteredUsers || []"
-                [showActions]="true" (edit)="editUser($event.row, $event.index)" (delete)="confirmDelete($event)">
+            <app-table [columns]="columns" [data]="filteredUsers || []" [showActions]="true"
+                (edit)="editUser($event.row, $event.index)" (delete)="confirmDelete($event)">
             </app-table>
         </app-card>
 
