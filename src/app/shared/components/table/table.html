@@ -5,20 +5,20 @@
     <thead class="bg-gray-100">
       <tr>
         @for (col of columns; track col) {
-          <th (click)="sortData(col)" class="cursor-pointer">
-            {{ col }}
-            @if (sortColumn === col) {
-              <span>
-                {{ sortDirection === 'asc' ? '▲' : '▼' }}
-              </span>
-            }
-          </th>
+        <th (click)="sortData(col)" class="cursor-pointer">
+          {{ col }}
+          @if (sortColumn === col) {
+          <span>
+            {{ sortDirection === 'asc' ? '▲' : '▼' }}
+          </span>
+          }
+        </th>
         }
 
         @if (showActions) {
-          <th class="px-6 py-3">
-            Actions
-          </th>
+        <th class="px-6 py-3">
+          Actions
+        </th>
         }
       </tr>
     </thead>
@@ -26,23 +26,23 @@
     <tbody>
 
       @for (row of paginatedData; track row; let i = $index) {
-        <tr class="border-t">
-          @for (col of columns; track col) {
-            <td class="px-6 py-4">
-              {{ row[col.toLowerCase()] }}
-            </td>
-          }
-          @if (showActions) {
-            <td class="px-6 py-4 space-x-2">
-              <button (click)="edit.emit({row, index:i})" class="text-blue-600">
-                Edit
-              </button>
-              <button (click)="delete.emit(row)" class="text-red-600 hover:underline">
-                Delete
-              </button>
-            </td>
-          }
-        </tr>
+      <tr class="border-t">
+        @for (col of columns; track col) {
+        <td class="px-6 py-4">
+          {{ row[col.toLowerCase()] }}
+        </td>
+        }
+        @if (showActions) {
+        <td class="px-6 py-4 space-x-2">
+          <button (click)="edit.emit({row, index:i})" class="text-blue-600">
+            Edit
+          </button>
+          <button (click)="delete.emit({row, index:i})" class="text-red-600 hover:underline">
+            Delete
+          </button>
+        </td>
+        }
+      </tr>
       }
 
     </tbody>

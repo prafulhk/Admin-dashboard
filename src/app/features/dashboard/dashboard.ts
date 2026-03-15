@@ -8,7 +8,10 @@ import { ToastService } from '../../core/services/toast-service';
 import { Toast } from '../../shared/components/toast/toast/toast';
 import { Skeleton } from '../../shared/components/skeleton/skeleton';
 
-import { User, UserService } from '../../core/services/user-service';
+import { User } from '../../core/services/user-service';
+import { Store } from '@ngrx/store';
+import { addUser, loadUsers, deleteUser, updateUser } from '../../store/users/users.actions';
+import { selectAllUsers } from '../../store/users/users.selectors';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,6 +32,7 @@ export class Dashboard {
   searchText = '';
   isLoading = false;
   filteredUsers: User[] = [];
+  roleChartData: number[] = [0, 0, 0];
   newUser = {
     name: '',
     email: '',
@@ -39,19 +43,21 @@ export class Dashboard {
 
   constructor(
     private toast: ToastService,
-    private userService: UserService,
     private cdr: ChangeDetectorRef,
+    private store: Store,
   ) {}
 
   ngOnInit() {
-    this.loadUsers();
-  }
-
-  loadUsers() {
     this.isLoading = true;
-    this.userService.getUsers().subscribe((data) => {
-      this.users = data;
-      this.filteredUsers = [...data];
+
+    this.store.dispatch(loadUsers());
+
+    this.store.select(selectAllUsers).subscribe((users) => {
+      this.users = users;
+      console.log('this.users:', this.users);
+      this.filteredUsers = users;
+      this.roleChartData = this.calculateRoleStats(users);
+      console.log(this.roleChartData);
       this.isLoading = false;
       this.cdr.detectChanges();
     });
@@ -85,14 +91,19 @@ export class Dashboard {
 
   saveUser() {
     if (this.isEditMode) {
-      this.userService.updateUser(this.editIndex, this.newUser);
+      this.store.dispatch(
+        updateUser({
+          index: this.editIndex,
+          user: this.newUser,
+        }),
+      );
+
       this.toast.show('User Updated');
     } else {
-      this.userService.addUser(this.newUser);
+      this.store.dispatch(addUser({ user: this.newUser }));
       this.toast.show('User Added');
     }
 
-    this.refreshUsers();
     this.closeModal();
   }
 
@@ -102,32 +113,23 @@ export class Dashboard {
   }
 
   deleteUser() {
-    this.userService.deleteUser(this.deleteIndex);
+    this.store.dispatch(
+      deleteUser({
+        index: this.deleteIndex,
+      }),
+    );
 
-    this.refreshUsers();
     this.isDeleteModalOpen = false;
     this.toast.show('User Deleted');
   }
 
-  refreshUsers() {
-    this.userService.getUsers().subscribe((data) => {
-      this.users = data;
-      this.filteredUsers = [...data];
-      this.cdr.detectChanges();
+  calculateRoleStats(users: User[]) {
+    const roles = { Admin: 0, Editor: 0, User: 0 };
+    users.forEach((user) => {
+      if (roles.hasOwnProperty(user.role)) {
+        roles[user.role as keyof typeof roles]++;
+      }
     });
-  }
-
-  getRoleStats() {
-    const roles: any = {
-      Admin: 0,
-      Editor: 0,
-      User: 0,
-    };
-
-    this.users.forEach((user) => {
-      roles[user.role]++;
-    });
-
     return [roles.Admin, roles.Editor, roles.User];
   }
 

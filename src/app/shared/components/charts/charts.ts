@@ -1,4 +1,11 @@
-import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import { Chart } from 'chart.js/auto';
 import { Skeleton } from '../skeleton/skeleton';
 
@@ -17,6 +24,7 @@ export class Charts implements AfterViewInit {
   @Input() chartType: any = 'line';
   @Input() labels: string[] = [];
   isLoading = false;
+  private chart: Chart | undefined;
 
   ngOnInit() {
     setTimeout(() => {
@@ -24,8 +32,20 @@ export class Charts implements AfterViewInit {
     }, 1500);
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    // If the data changes and the chart already exists, update it
+    if (changes['chartData'] && this.chart) {
+      this.chart.data.datasets[0].data = this.chartData;
+      this.chart.update();
+    }
+  }
+
   ngAfterViewInit(): void {
-    new Chart(this.chartCanvas.nativeElement, {
+    this.initChart();
+  }
+
+  private initChart() {
+    this.chart = new Chart(this.chartCanvas.nativeElement, {
       type: this.chartType,
       data: {
         labels: this.labels,
@@ -36,7 +56,8 @@ export class Charts implements AfterViewInit {
             borderColor: '#3b82f6',
             backgroundColor:
               this.chartType === 'pie' ? ['#3b82f6', '#10b981', '#f59e0b'] : 'rgba(59,130,246,0.2)',
-            tension: this.chartType === 'line' ? 0.3 : 0,
+            fill: this.chartType === 'line',
+            tension: 0.3,
           },
         ],
       },

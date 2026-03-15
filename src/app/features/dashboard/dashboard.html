@@ -1,43 +1,43 @@
 <div class="w-full">
 
   @if (isLoading) {
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <app-skeleton [height]="80"></app-skeleton>
-      <app-skeleton [height]="80"></app-skeleton>
-      <app-skeleton [height]="80"></app-skeleton>
-    </div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <app-skeleton [height]="80"></app-skeleton>
+    <app-skeleton [height]="80"></app-skeleton>
+    <app-skeleton [height]="80"></app-skeleton>
+  </div>
   }
 
   @if (!isLoading) {
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-      <app-card class="w-full">
-        <div class="flex justify-between items-center">
-          <div>
-            <p class="text-gray-500 text-sm">Total Users</p>
-            <h2 class="text-2xl font-bold">{{ getTotalUsers() }}</h2>
-          </div>
-          <span class="text-blue-500 text-2xl">👥</span>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+    <app-card class="w-full">
+      <div class="flex justify-between items-center">
+        <div>
+          <p class="text-gray-500 text-sm">Total Users</p>
+          <h2 class="text-2xl font-bold">{{ getTotalUsers() }}</h2>
         </div>
-      </app-card>
-      <app-card class="w-full">
-        <div class="flex justify-between items-center">
-          <div>
-            <p class="text-gray-500 text-sm">Admins</p>
-            <h2 class="text-2xl font-bold">{{ getAdminCount() }}</h2>
-          </div>
-          <span class="text-green-500 text-2xl">💰</span>
+        <span class="text-blue-500 text-2xl">👥</span>
+      </div>
+    </app-card>
+    <app-card class="w-full">
+      <div class="flex justify-between items-center">
+        <div>
+          <p class="text-gray-500 text-sm">Admins</p>
+          <h2 class="text-2xl font-bold">{{ getAdminCount() }}</h2>
         </div>
-      </app-card>
-      <app-card class="w-full">
-        <div class="flex justify-between items-center">
-          <div>
-            <p class="text-gray-500 text-sm">Active Users</p>
-            <h2 class="text-2xl font-bold">{{ getActiveUsers() }}</h2>
-          </div>
-          <span class="text-purple-500 text-2xl">📦</span>
+        <span class="text-green-500 text-2xl">💰</span>
+      </div>
+    </app-card>
+    <app-card class="w-full">
+      <div class="flex justify-between items-center">
+        <div>
+          <p class="text-gray-500 text-sm">Active Users</p>
+          <h2 class="text-2xl font-bold">{{ getActiveUsers() }}</h2>
         </div>
-      </app-card>
-    </div>
+        <span class="text-purple-500 text-2xl">📦</span>
+      </div>
+    </app-card>
+  </div>
   }
 
   <h2 class="text-lg font-semibold mt-6 mb-4">
@@ -52,7 +52,7 @@
     </app-charts>
 
     <div class="md:col-span-2">
-      <app-charts chartLabel="User Roles" chartType="pie" [labels]="pieChartLabel" [chartData]="getRoleStats()">
+      <app-charts chartLabel="User Roles" chartType="pie" [labels]="pieChartLabel" [chartData]="roleChartData">
       </app-charts>
     </div>
 
