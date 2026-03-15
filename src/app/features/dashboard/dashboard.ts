@@ -28,135 +28,7 @@ export class Dashboard {
   columns = ['Name', 'Email', 'Role', 'Status'];
   searchText = '';
   isLoading = false;
-  // users = [
-  //   {
-  //     name: 'John Doe',
-  //     email: 'john@example.com',
-  //     role: 'Admin',
-  //     status: 'Active',
-  //   },
-  //   {
-  //     name: 'Jane Smith',
-  //     email: 'jane@example.com',
-  //     role: 'Editor',
-  //     status: 'Pending',
-  //   },
-  //   {
-  //     name: 'David Lee',
-  //     email: 'david@example.com',
-  //     role: 'User',
-  //     status: 'Active',
-  //   },
-  //   {
-  //     name: 'John Doe',
-  //     email: 'john@example.com',
-  //     role: 'Admin',
-  //     status: 'Active',
-  //   },
-  //   {
-  //     name: 'Jane Smith',
-  //     email: 'jane@example.com',
-  //     role: 'Editor',
-  //     status: 'Pending',
-  //   },
-  //   {
-  //     name: 'David Lee',
-  //     email: 'david@example.com',
-  //     role: 'User',
-  //     status: 'Active',
-  //   },
-  //   {
-  //     name: 'John Doe',
-  //     email: 'john@example.com',
-  //     role: 'Admin',
-  //     status: 'Active',
-  //   },
-  //   {
-  //     name: 'Jane Smith',
-  //     email: 'jane@example.com',
-  //     role: 'Editor',
-  //     status: 'Pending',
-  //   },
-  //   {
-  //     name: 'David Lee',
-  //     email: 'david@example.com',
-  //     role: 'User',
-  //     status: 'Active',
-  //   },
-  //   {
-  //     name: 'John Doe',
-  //     email: 'john@example.com',
-  //     role: 'Admin',
-  //     status: 'Active',
-  //   },
-  //   {
-  //     name: 'Jane Smith',
-  //     email: 'jane@example.com',
-  //     role: 'Editor',
-  //     status: 'Pending',
-  //   },
-  //   {
-  //     name: 'David Lee',
-  //     email: 'david@example.com',
-  //     role: 'User',
-  //     status: 'Active',
-  //   },
-  //   {
-  //     name: 'John Doe',
-  //     email: 'john@example.com',
-  //     role: 'Admin',
-  //     status: 'Active',
-  //   },
-  //   {
-  //     name: 'Jane Smith',
-  //     email: 'jane@example.com',
-  //     role: 'Editor',
-  //     status: 'Pending',
-  //   },
-  //   {
-  //     name: 'David Lee',
-  //     email: 'david@example.com',
-  //     role: 'User',
-  //     status: 'Active',
-  //   },
-  //   {
-  //     name: 'John Doe',
-  //     email: 'john@example.com',
-  //     role: 'Admin',
-  //     status: 'Active',
-  //   },
-  //   {
-  //     name: 'Jane Smith',
-  //     email: 'jane@example.com',
-  //     role: 'Editor',
-  //     status: 'Pending',
-  //   },
-  //   {
-  //     name: 'David Lee',
-  //     email: 'david@example.com',
-  //     role: 'User',
-  //     status: 'Active',
-  //   },
-  //   {
-  //     name: 'John Doe',
-  //     email: 'john@example.com',
-  //     role: 'Admin',
-  //     status: 'Active',
-  //   },
-  //   {
-  //     name: 'Jane Smith',
-  //     email: 'jane@example.com',
-  //     role: 'Editor',
-  //     status: 'Pending',
-  //   },
-  //   {
-  //     name: 'David Lee',
-  //     email: 'david@example.com',
-  //     role: 'User',
-  //     status: 'Active',
-  //   },
-  // ];
-
+  filteredUsers: User[] = [];
   newUser = {
     name: '',
     email: '',
@@ -171,12 +43,15 @@ export class Dashboard {
   ) {}
 
   ngOnInit() {
-    setTimeout(() => {
-      this.isLoading = false;
-    }, 1500);
+    this.loadUsers();
+  }
 
+  loadUsers() {
+    this.isLoading = true;
     this.userService.getUsers().subscribe((data) => {
       this.users = data;
+      this.filteredUsers = [...data];
+      this.isLoading = false;
     });
   }
 
@@ -215,27 +90,28 @@ export class Dashboard {
       this.toast.show('User Added');
     }
 
-    this.userService.getUsers().subscribe((data) => {
-      this.users = data;
-    });
-
+    this.refreshUsers();
     this.closeModal();
   }
 
-  confirmDelete(index: number) {
-    this.deleteIndex = index;
+  confirmDelete(event: any) {
+    this.deleteIndex = event.index;
     this.isDeleteModalOpen = true;
   }
 
   deleteUser() {
     this.userService.deleteUser(this.deleteIndex);
 
-    this.userService.getUsers().subscribe((data) => {
-      this.users = data;
-    });
-
+    this.refreshUsers();
     this.isDeleteModalOpen = false;
     this.toast.show('User Deleted');
+  }
+
+  refreshUsers() {
+    this.userService.getUsers().subscribe((data) => {
+      this.users = data;
+      this.filteredUsers = [...data];
+    });
   }
 
   getRoleStats() {
@@ -264,14 +140,10 @@ export class Dashboard {
     return this.users.filter((user) => user.status === 'Active').length;
   }
 
-  get filteredUsers() {
-    if (!this.searchText) {
-      return this.users;
-    }
-
+  onSearch() {
     const search = this.searchText.toLowerCase();
 
-    return this.users.filter(
+    this.filteredUsers = this.users.filter(
       (user) =>
         user.name.toLowerCase().includes(search) ||
         user.email.toLowerCase().includes(search) ||

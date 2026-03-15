@@ -19,7 +19,7 @@ export class UserService {
   ];
 
   getUsers(): Observable<User[]> {
-    return of(this.users).pipe(delay(500)); // simulate API delay
+    return of([...this.users]).pipe(delay(500)); // simulate API delay
   }
 
   addUser(user: User) {
