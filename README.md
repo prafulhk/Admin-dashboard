@@ -6,8 +6,7 @@ Live Demo
 
 Deployed on Vercel
 
-https://admin-dashboard-delta-flax-65.vercel.app/
-Features
+https://admin-dashboard-knuf.vercel.app/
 
 Dashboard analytics with charts
 
