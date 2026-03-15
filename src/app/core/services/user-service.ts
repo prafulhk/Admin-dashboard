@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { delay, Observable, of } from 'rxjs';
 
 export interface User {
   name: string;
@@ -17,8 +18,8 @@ export class UserService {
     { name: 'David Lee', email: 'david@example.com', role: 'User', status: 'Active' },
   ];
 
-  getUsers(): User[] {
-    return this.users;
+  getUsers(): Observable<User[]> {
+    return of(this.users).pipe(delay(500)); // simulate API delay
   }
 
   addUser(user: User) {

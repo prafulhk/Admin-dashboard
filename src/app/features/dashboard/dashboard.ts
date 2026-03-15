@@ -175,7 +175,9 @@ export class Dashboard {
       this.isLoading = false;
     }, 1500);
 
-    this.users = this.userService.getUsers();
+    this.userService.getUsers().subscribe((data) => {
+      this.users = data;
+    });
   }
 
   openModal() {
@@ -213,7 +215,9 @@ export class Dashboard {
       this.toast.show('User Added');
     }
 
-    this.users = this.userService.getUsers();
+    this.userService.getUsers().subscribe((data) => {
+      this.users = data;
+    });
 
     this.closeModal();
   }
@@ -226,7 +230,9 @@ export class Dashboard {
   deleteUser() {
     this.userService.deleteUser(this.deleteIndex);
 
-    this.users = this.userService.getUsers();
+    this.userService.getUsers().subscribe((data) => {
+      this.users = data;
+    });
 
     this.isDeleteModalOpen = false;
     this.toast.show('User Deleted');
