@@ -4,42 +4,46 @@
 
     <thead class="bg-gray-100">
       <tr>
-        <th *ngFor="let col of columns" (click)="sortData(col)" class="cursor-pointer">
+        @for (col of columns; track col) {
+          <th (click)="sortData(col)" class="cursor-pointer">
+            {{ col }}
+            @if (sortColumn === col) {
+              <span>
+                {{ sortDirection === 'asc' ? '▲' : '▼' }}
+              </span>
+            }
+          </th>
+        }
 
-          {{ col }}
-
-          <span *ngIf="sortColumn === col">
-            {{ sortDirection === 'asc' ? '▲' : '▼' }}
-          </span>
-        </th>
-
-        <th *ngIf="showActions" class="px-6 py-3">
-          Actions
-        </th>
+        @if (showActions) {
+          <th class="px-6 py-3">
+            Actions
+          </th>
+        }
       </tr>
     </thead>
 
     <tbody>
 
-      <tr *ngFor="let row of paginatedData; let i = index" class="border-t">
-
-        <td *ngFor="let col of columns" class="px-6 py-4">
-          {{ row[col.toLowerCase()] }}
-        </td>
-
-        <td *ngIf="showActions" class="px-6 py-4 space-x-2">
-
-          <button (click)="edit.emit({row, index:i})" class="text-blue-600">
-            Edit
-          </button>
-
-          <button (click)="delete.emit(row)" class="text-red-600 hover:underline">
-            Delete
-          </button>
-
-        </td>
-
-      </tr>
+      @for (row of paginatedData; track row; let i = $index) {
+        <tr class="border-t">
+          @for (col of columns; track col) {
+            <td class="px-6 py-4">
+              {{ row[col.toLowerCase()] }}
+            </td>
+          }
+          @if (showActions) {
+            <td class="px-6 py-4 space-x-2">
+              <button (click)="edit.emit({row, index:i})" class="text-blue-600">
+                Edit
+              </button>
+              <button (click)="delete.emit(row)" class="text-red-600 hover:underline">
+                Delete
+              </button>
+            </td>
+          }
+        </tr>
+      }
 
     </tbody>
 

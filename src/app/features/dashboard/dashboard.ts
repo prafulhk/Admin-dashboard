@@ -7,12 +7,12 @@ import { Charts } from '../../shared/components/charts/charts';
 import { ToastService } from '../../core/services/toast-service';
 import { Toast } from '../../shared/components/toast/toast/toast';
 import { Skeleton } from '../../shared/components/skeleton/skeleton';
-import { CommonModule } from '@angular/common';
+
 import { User, UserService } from '../../core/services/user-service';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [Card, Table, Modal, FormsModule, Charts, Toast, Skeleton, CommonModule],
+  imports: [Card, Table, Modal, FormsModule, Charts, Toast, Skeleton],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })

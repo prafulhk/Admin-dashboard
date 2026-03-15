@@ -1,12 +1,12 @@
 import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js/auto';
 import { Skeleton } from '../skeleton/skeleton';
-import { CommonModule } from '@angular/common';
+
 import { Card } from '../card/card';
 
 @Component({
   selector: 'app-charts',
-  imports: [CommonModule, Card],
+  imports: [Card],
   templateUrl: './charts.html',
   styleUrl: './charts.css',
 })
