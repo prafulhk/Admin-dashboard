@@ -1,0 +1,130 @@
+<div class="w-full">
+
+  @if (isLoading) {
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <app-skeleton [height]="80"></app-skeleton>
+    <app-skeleton [height]="80"></app-skeleton>
+    <app-skeleton [height]="80"></app-skeleton>
+  </div>
+  }
+
+  @if (!isLoading) {
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+    <app-card class="w-full">
+      <div class="flex justify-between items-center">
+        <div>
+          <p class="text-gray-500 text-sm">Total Users</p>
+          <h2 class="text-2xl font-bold">{{ getTotalUsers() }}</h2>
+        </div>
+        <span class="text-blue-500 text-2xl">👥</span>
+      </div>
+    </app-card>
+    <app-card class="w-full">
+      <div class="flex justify-between items-center">
+        <div>
+          <p class="text-gray-500 text-sm">Admins</p>
+          <h2 class="text-2xl font-bold">{{ getAdminCount() }}</h2>
+        </div>
+        <span class="text-green-500 text-2xl">💰</span>
+      </div>
+    </app-card>
+    <app-card class="w-full">
+      <div class="flex justify-between items-center">
+        <div>
+          <p class="text-gray-500 text-sm">Active Users</p>
+          <h2 class="text-2xl font-bold">{{ getActiveUsers() }}</h2>
+        </div>
+        <span class="text-purple-500 text-2xl">📦</span>
+      </div>
+    </app-card>
+  </div>
+  }
+
+  <h2 class="text-lg font-semibold mt-6 mb-4">
+    Analytics Overview
+  </h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 w-full">
+
+    <app-charts chartLabel="User Growth" [labels]="lineChartLabel" [chartData]="[120,190,300,250,320,400]">
+    </app-charts>
+
+    <app-charts chartLabel="Revenue Trend" [labels]="lineChartLabel" [chartData]="[1000,1500,3000,2500,4200,5200]">
+    </app-charts>
+
+    <div class="md:col-span-2">
+      <app-charts chartLabel="User Roles" chartType="pie" [labels]="pieChartLabel" [chartData]="roleChartData">
+      </app-charts>
+    </div>
+
+  </div>
+
+  <div class="mt-8">
+
+    <div class="flex justify-between items-center mb-4">
+
+      <h2 class="text-lg font-semibold">
+        Recent Users
+      </h2>
+
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+
+        <div class="relative">
+          <input type="text" placeholder="Search users..." [(ngModel)]="searchText" (input)="onSearch()"
+            class="border px-3 py-2 pl-8 rounded w-full md:w-64" />
+          <span class="absolute left-2 top-2">🔍</span>
+        </div>
+
+        <button (click)="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded">
+          Add User
+        </button>
+
+      </div>
+
+    </div>
+    <app-card>
+      <app-table [columns]="columns" [data]="filteredUsers || []" [showActions]="true"
+        (edit)="editUser($event.row, $event.index)" (delete)="confirmDelete($event)">
+      </app-table>
+    </app-card>
+
+    <app-modal [title]="isEditMode ?'Edit User' : 'Add User'" [isOpen]="isModalOpen" (close)="closeModal()">
+
+      <div class="space-y-3">
+
+        <input type="text" placeholder="Name" [(ngModel)]="newUser.name" class="w-full border p-2 rounded">
+
+        <input type="email" placeholder="Email" [(ngModel)]="newUser.email" class="w-full border p-2 rounded">
+
+        <button (click)="saveUser()" class="bg-green-600 text-white px-4 py-2 rounded">
+
+          {{ isEditMode ? 'Update' : 'Save' }}
+
+        </button>
+      </div>
+
+    </app-modal>
+
+    <app-modal title="Delete User" [isOpen]="isDeleteModalOpen" (close)="isDeleteModalOpen=false">
+
+      <p class="mb-4">
+        Are you sure you want to delete this user?
+      </p>
+
+      <div class="flex gap-3">
+
+        <button (click)="isDeleteModalOpen=false" class="px-4 py-2 border rounded">
+          Cancel
+        </button>
+
+        <button (click)="deleteUser()" class="px-4 py-2 bg-red-600 text-white rounded">
+          Delete
+        </button>
+
+      </div>
+
+    </app-modal>
+    <app-toast></app-toast>
+
+  </div>
+
+</div>

@@ -1,0 +1,5 @@
+@if (toastService.visible$ | async) {
+<div class="fixed top-5 right-5 bg-green-600 text-white px-4 py-2 rounded shadow transition-opacity duration-300">
+  {{ toastService.message$ | async }}
+</div>
+}
